@@ -10,6 +10,21 @@ ultraljudssensor. Avståndet från sensorn till vätskeytan räknas om till:
 Enheten ansluter till Home Assistant via ESPHome API och har även en lokal
 webbsida på port 80.
 
+## Anpassat för fyra sammankopplade IBC-tankar
+
+Projektet är skapat för fyra IBC-tankar à cirka 1 000 liter som är
+sammankopplade i serie, med en total kapacitet på cirka 4 000 liter.
+Konfigurationens standardvärde `capacity_l: "4000"` och volymberäkning är
+anpassade för denna installation.
+
+Beräkningen förutsätter att tankarna är hydrauliskt sammankopplade så att
+vätskan kan flöda mellan dem och nivån blir densamma i samtliga tankar. En
+sensor i en av tankarna används då för att uppskatta den sammanlagda volymen
+i alla fyra.
+
+Om antalet tankar, tankarnas storlek eller hur de är sammankopplade skiljer
+sig måste `capacity_l` och eventuellt beräkningsmodellen anpassas.
+
 ## Förutsättningar
 
 - ESP32 (`esp32dev`)
