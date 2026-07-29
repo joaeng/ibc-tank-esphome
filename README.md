@@ -1,7 +1,8 @@
 # IBC-tankmätare med ESPHome
 
-Det här projektet mäter vätskenivån i en IBC-tank med en ESP32 och en
-ultraljudssensor. Avståndet från sensorn till vätskeytan räknas om till:
+Det här projektet mäter vätskenivån i ett system med fyra sammankopplade
+IBC-tankar med hjälp av en ESP32 och en ultraljudssensor. Avståndet från
+sensorn till den gemensamma vätskeytan räknas om till:
 
 - avstånd i meter
 - fyllnadsnivå i procent
