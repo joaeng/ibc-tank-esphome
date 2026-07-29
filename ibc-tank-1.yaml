@@ -1,0 +1,110 @@
+substitutions:
+  device_name: ibc-tank-1
+  friendly_name: IBC Tank 1
+  trigger_pin: GPIO19
+  echo_pin: GPIO18
+  empty_distance_m: "1.00"
+  full_distance_m: "0.15"
+  capacity_l: "4000"
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+
+esp32:
+  board: esp32dev
+
+logger:
+
+api:
+  encryption:
+    key: !secret ibc_tank_1_api_key
+
+ota:
+  - platform: esphome
+    password: !secret ibc_tank_1_ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "${friendly_name} reservnat"
+    password: !secret ibc_tank_1_fallback_password
+
+captive_portal:
+web_server:
+  port: 80
+
+button:
+  - platform: restart
+    name: Starta om
+
+sensor:
+  - platform: pulse_width
+    id: ibc_distance
+    name: Avstand till vatska
+    pin: GPIO18
+    unit_of_measurement: m
+    device_class: distance
+    state_class: measurement
+    accuracy_decimals: 3
+    update_interval: 1s
+    filters:
+      - multiply: 174.0
+      - lambda: |-
+          if (x < 0.18f || x > 2.0f) return {};
+          return x;
+      - median:
+          window_size: 5
+          send_every: 3
+          send_first_at: 1
+
+  - platform: template
+    name: Niva
+    unit_of_measurement: "%"
+    device_class: battery
+    state_class: measurement
+    accuracy_decimals: 1
+    update_interval: 10s
+    lambda: |-
+      const float distance = id(ibc_distance).state;
+      if (isnan(distance)) return NAN;
+      const float fraction = (${empty_distance_m} - distance) /
+                             (${empty_distance_m} - ${full_distance_m});
+      return fmaxf(0.0f, fminf(100.0f, fraction * 100.0f));
+
+  - platform: template
+    name: Volym
+    unit_of_measurement: L
+    device_class: volume
+    state_class: measurement
+    accuracy_decimals: 0
+    update_interval: 10s
+    lambda: |-
+      const float distance = id(ibc_distance).state;
+      if (isnan(distance)) return NAN;
+      const float fraction = (${empty_distance_m} - distance) /
+                             (${empty_distance_m} - ${full_distance_m});
+      const float bounded = fmaxf(0.0f, fminf(1.0f, fraction));
+      return bounded * ${capacity_l};
+
+  - platform: wifi_signal
+    name: WiFi-signal
+    update_interval: 60s
+
+  - platform: uptime
+    name: Drifttid
+
+binary_sensor:
+  - platform: template
+    name: Matfel
+    device_class: problem
+    lambda: return isnan(id(ibc_distance).state);
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP-adress
+    ssid:
+      name: Anslutet WiFi
