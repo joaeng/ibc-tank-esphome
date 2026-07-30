@@ -40,6 +40,8 @@ ESP32. ESP32:s GPIO-pinnar tål 3,3 V.
 ## Filer
 
 - `ibc-tank-1.yaml` – ESPHome-konfigurationen
+- `home-assistant/ibc-tank-card.yaml` – Lovelace-kort med levande vattennivå
+- `home-assistant/ibc-tank-overlay.png` – transparent tankbild till kortet
 - `secrets.yaml` – egna lösenord och nycklar; ska skapas lokalt och får inte
   läggas in i Git
 
@@ -132,3 +134,42 @@ skickas trådlöst med ESPHome OTA.
 
 Beräkningen antar att volymen förändras linjärt med vätskenivån, vilket
 passar en IBC-tank med i stort sett jämnt tvärsnitt.
+
+## Home Assistant-kort
+
+I `home-assistant/` finns ett färdigt Lovelace-kort som visar:
+
+- en IBC-tank med levande vattennivå
+- fyllnadsgrad i procent
+- avrundad volym i hela liter
+- en mjuk övergång när sensorn rapporterar en ny nivå
+
+Kortet använder [Button Card](https://github.com/custom-cards/button-card), som kan
+installeras via HACS.
+
+### Installera bilden
+
+Kopiera `home-assistant/ibc-tank-overlay.png` till Home Assistants
+`/config/www/images/ibc-tank-overlay.png`. Filen blir då tillgänglig i Lovelace
+som `/local/images/ibc-tank-overlay.png`.
+
+### Lägg till kortet
+
+Kopiera innehållet i `home-assistant/ibc-tank-card.yaml` till ett manuellt kort
+i dashboarden. I en YAML-baserad dashboard kan samma block klistras in under
+`cards:`.
+
+Standardkonfigurationen använder entiteterna:
+
+```text
+sensor.ibc_tank_1_niva
+sensor.ibc_tank_1_volym
+```
+
+Kontrollera entitetsnamnen under **Inställningar → Enheter och tjänster →
+Entiteter** i Home Assistant. Om ESPHome-enheten har fått ett annat namn,
+ersätt båda entitets-ID:n i kortfilen.
+
+Vattenlagrets höjd följer nivåsensorn kontinuerligt mellan 0 och 100 procent.
+Tankbilden ligger ovanpå vattenlagret, vilket gör att nivån syns genom gallret
+utan att bilden behöver genereras om.
