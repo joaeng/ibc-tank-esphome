@@ -3,6 +3,7 @@ substitutions:
   friendly_name: IBC Tank 1
   trigger_pin: GPIO19
   echo_pin: GPIO18
+  distance_offset_m: "0.020"
   empty_distance_m: "1.00"
   full_distance_m: "0.15"
   capacity_l: "4000"
@@ -52,6 +53,7 @@ sensor:
     update_interval: 1s
     filters:
       - multiply: 174.0
+      - offset: ${distance_offset_m}
       - lambda: |-
           if (x < 0.18f || x > 2.0f) return {};
           return x;

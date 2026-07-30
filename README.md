@@ -55,6 +55,7 @@ substitutions:
   friendly_name: IBC Tank 1
   trigger_pin: GPIO19
   echo_pin: GPIO18
+  distance_offset_m: "0.020"
   empty_distance_m: "1.00"
   full_distance_m: "0.15"
   capacity_l: "4000"
@@ -67,6 +68,8 @@ substitutions:
 - `friendly_name` – namnet som visas i ESPHome och Home Assistant.
 - `echo_pin` – är förberedd som substitution men används inte i den nuvarande
   konfigurationen.
+- `distance_offset_m` – fast avståndskorrigering i meter. Positivt värde läggs
+  till sensorvärdet; `"0.020"` korrigerar 59,8 cm till 61,8 cm.
 - `empty_distance_m` – uppmätt avstånd i meter från sensorn till vätskeytan
   när tanken är tom.
 - `full_distance_m` – uppmätt avstånd i meter när tanken är full.
@@ -77,6 +80,9 @@ Den GPIO som faktiskt används anges som `pin: GPIO18` under sensorn
 Även `trigger_pin` är förberedd som substitution men används inte av den
 nuvarande `pulse_width`-sensorn. Den behöver därför inte ändras om inte
 konfigurationen byggs om för en sensor med separat trigger.
+
+Kalibrera först `distance_offset_m` mot ett känt avstånd. Beräkna offseten som
+`verkligt avstånd - uppmätt avstånd`, uttryckt i meter. Exempel: `0.618 - 0.598 = 0.020`, vilket ger `distance_offset_m: "0.020"`.
 
 Mät `empty_distance_m` och `full_distance_m` i den verkliga installationen.
 Det är dessa två värden som avgör hur avståndet räknas om till procent och
