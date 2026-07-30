@@ -146,7 +146,7 @@ I `home-assistant/` finns ett färdigt Lovelace-kort som visar:
 
 | Tom | 50 % | 100 % |
 |:---:|:---:|:---:|
-| ![Tom IBC-tank](home-assistant/ibc-tank-empty.png) | ![IBC-tank vid 50 procent](home-assistant/ibc-tank-50.png) | ![Full IBC-tank](home-assistant/ibc-tank-100.png) |
+| ![Tom IBC-tank](home-assistant/ibc-tank-level-0.png) | ![IBC-tank vid 50 procent](home-assistant/ibc-tank-level-50.png) | ![Full IBC-tank](home-assistant/ibc-tank-level-100.png) |
 
 Kortet använder [Button Card](https://github.com/custom-cards/button-card), som kan
 installeras via HACS.
