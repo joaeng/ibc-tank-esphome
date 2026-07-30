@@ -50,7 +50,7 @@ sensor:
     device_class: distance
     state_class: measurement
     accuracy_decimals: 3
-    update_interval: 1s
+    update_interval: 10s
     filters:
       - multiply: 174.0
       - offset: ${distance_offset_m}
@@ -58,7 +58,7 @@ sensor:
           if (x < 0.18f || x > 2.0f) return {};
           return x;
       - median:
-          window_size: 5
+          window_size: 3
           send_every: 3
           send_first_at: 1
 
@@ -68,7 +68,7 @@ sensor:
     device_class: battery
     state_class: measurement
     accuracy_decimals: 1
-    update_interval: 10s
+    update_interval: 30s
     lambda: |-
       const float distance = id(ibc_distance).state;
       if (isnan(distance)) return NAN;
@@ -82,7 +82,7 @@ sensor:
     device_class: volume
     state_class: measurement
     accuracy_decimals: 0
-    update_interval: 10s
+    update_interval: 30s
     lambda: |-
       const float distance = id(ibc_distance).state;
       if (isnan(distance)) return NAN;

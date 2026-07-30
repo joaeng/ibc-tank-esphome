@@ -11,6 +11,10 @@ sensorn till den gemensamma vätskeytan räknas om till:
 Enheten ansluter till Home Assistant via ESPHome API och har även en lokal
 webbsida på port 80.
 
+Avståndet provtas var 10:e sekund och medianfiltreras över tre mätningar.
+Avstånd, nivå och volym publiceras normalt var 30:e sekund; det första
+värdet skickas direkt efter uppstart.
+
 ## Anpassat för fyra sammankopplade IBC-tankar
 
 Projektet är skapat för fyra IBC-tankar à cirka 1 000 liter som är
